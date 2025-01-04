@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+
+  <meta name="description" content="Fast Federated Unlearning with Contribution Dampening">
+  <meta property="og:title" content="CONDA: FAST FEDERATED UNLEARNING WITH
+  CONTRIBUTION DAMPENING"/>
+  <meta property="og:description" content="A framework for efficient federated unlearning leveraging Contribution Dampening (ConDa) to address computational challenges."/>
+  <meta property="og:url" content="URL OF THE WEBSITE"/><!-- add the website link-->
+  <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X630
+  <meta property="og:image" content="static/image/your_banner_image.png" />
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/> -->
+
+
+  <!-- <meta name="twitter:title" content="TWITTER BANNER TITLE META TAG"> -->
+  <!-- <meta name="twitter:description" content="TWITTER BANNER DESCRIPTION META TAG"> -->
+  <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X600-->
+  <!-- <meta name="twitter:image" content="static/images/your_twitter_banner_image.png"> -->
+  <!-- <meta name="twitter:card" content="summary_large_image"> -->
+  <!-- Keywords for your paper to be indexed by -->
+  <meta name="keywords" content="ConDa fast federated unlearning">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <title>CONDA: FAST FEDERATED UNLEARNING WITH
+    CONTRIBUTION DAMPENING</title>
+  <link rel="icon" type="image/x-icon" href="static/images/logo_respai.png">
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+  rel="stylesheet">
+
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+  <link rel="stylesheet" href="static/css/leaderboard.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script src="static/js/bulma-carousel.min.js"></script>
+  <script src="static/js/bulma-slider.min.js"></script>
+  <script src="static/js/index.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+    <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
+      TeX: {
+        extensions: ["AMSmath.js", "AMSsymbols.js"],
+
+        equationNumbers: { autoNumber: "AMS" }
+      }
+    });
+  </script>
+  <style>
+      body { font-family: Arial, sans-serif; margin: 40px; }
+      .algorithm { margin-top: 20px; }
+  </style>
+</head>
+<body>
+
+
+  <section class="hero">
+    <div class="RespAI_IMG" style="align-items:left; height:5vh; width:30vh;">
+      <img src="static/images/logo_respai.png" />
+    </div>
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">ConDa: Fast Federated Unlearning With
+              Contribution Dampening</h1>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block">
+                <a href="#" target="_blank">Vikram S. Chundawat</a><sup style="color:#a53220;">1</sup><sup style="color:#000000;">,</sup><sup style="color:#7c961e;">2</sup>,</span>
+              <span class="author-block">
+                <a href="#" target="_blank"> Pushkar Niroula</a><sup style="color:#2b00ff;">3</sup>,</span>
+              <span class="author-block">
+                <a href="#" target="_blank"> Prasanna Dhungana</a><sup style="color:#2b00ff;">3</sup>,</span>
+              <span class="author-block">
+                <a href="#" target="_blank"> Stefan Schoepf</a><sup style="color:#a53220;">1</sup><sup style="color:#000000;">,</sup><sup style="color:#1aff00;">4</sup>,</span>
+              <span class="author-block">
+                <a href="#" target="_blank"> Murari Mandal</a><sup style="color:#000000;">†,</sup><sup style="color:#2b00ff;">3</sup>,</span>
+              <span class="author-block">
+                <a href="#" target="_blank"> Alexandra Brintrup</a><sup style="color:#a53220;">1</sup><sup style="color:#000000;">,</sup><sup style="color:#1aff00;">4</sup>
+              </span>
+                  </div>
+
+                  <div class="is-size-5 publication-authors">
+                    <span class="author-block"><sup style="color:#a53220;">1</sup>University of Cambridge</span>&nbsp;
+                    <span class="author-block"><sup style="color:#7c961e;;">2</sup>SagepilotAI</span>&nbsp;
+                    <span class="author-block"><sup style="color:#2b00ff;">3</sup>RespAI Lab, KIIT Bhubaneswar</span>&nbsp;
+                    <span class="author-block"><sup style="color:#1aff00;">4</sup>The Alan Turing Institute, UK</span>
+                  </div>
+        
+                  <br>
+                          <div class="is-size-5 publication-authors">
+                    <span class="author-block"><sup style="color:#000000">†</sup>Corresponding Author:</span>
+                    <span class="author-block"><a href="mailto:murari.mandalfcs@kiit.ac.in">murari.mandalfcs@kiit.ac.in</a></span>
+                          </div>
+
+                  <div class="column has-text-centered">
+                    <div class="publication-links">
+                         <!-- Arxiv PDF link -->
+                      <span class="link-block">
+                        <a href="https://arxiv.org/pdf/2410.04144" target="_blank"
+                        class="external-link button is-normal is-rounded is-dark">
+                        <span class="icon">
+                          <i class="fas fa-file-pdf"></i>
+                        </span>
+                        <span>Paper</span>
+                      </a>
+                    </span>
+
+
+                  <!-- Github link -->
+                   <!-- Insert LINK here -->
+                  <span class="link-block">
+                    <a href="https://github.com/YOUR REPO HERE" target="_blank"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Code</span>
+                  </a>
+                </span>
+
+                <!-- ArXiv abstract Link -->
+                <span class="link-block">
+                  <a href="https://arxiv.org/abs/2410.04144" target="_blank"
+                  class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <img src="static/images/Fed_unlearning_image.png"/>
+      <!-- <video poster="" id="tree" autoplay controls muted loop height="100%">
+        Your video here
+        <source src="static/videos/banner_video.mp4"
+        type="video/mp4">
+      </video> -->
+      <h2 class="subtitle has-text-centered">
+        <br><br>The process of Client unlearning in a federated learning (FL) setting is depicted. We also
+        show the efficient nature of the proposed ConDa for federated unlearning.        
+      </h2>
+    </div>
+  </div>
+</section>
+
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <img src="static/images/CONDA_IMAGE.png"/>
+      <!-- <video poster="" id="tree" autoplay controls muted loop height="100%">
+        Your video here
+        <source src="static/videos/banner_video.mp4"
+        type="video/mp4">
+      </video> -->
+      <h2 class="subtitle has-text-centered">
+        <br><br>We present ConDa, a rapid federated unlearning technique utilizing contribution dampening, which
+eliminates the need for fine-tuning the global model and significantly reduces computational overhead. 
+      </h2>
+    </div>
+  </div>
+</section>
+
+<!-- Paper abstract -->
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Federated learning (FL) has enabled collaborative model training across decentralized data sources or clients. While adding new participants to a shared model
+            does not pose great technical hurdles, the removal of a participant and their related information contained in the shared model remains a challenge. To address
+            this problem, federated unlearning has emerged as a critical research direction,
+            seeking to remove information from globally trained models without harming the
+            model performance on the remaining data. Most modern federated unlearning
+            methods use costly approaches such as the use of remaining clients data to retrain
+            the global model or methods that would require heavy computation on client or
+            server side. We introduce Contribution Dampening (ConDa), a framework that
+            performs efficient unlearning by tracking down the parameters which affect the
+            global model for each client and performs synaptic dampening on the parameters
+            of the global model that have privacy infringing contributions from the forgetting
+            client. Our technique does not require clients data or any kind of retraining and it
+            does not put any computational overhead on either the client or server side. We
+            perform experiments on multiple datasets and demonstrate that CONDA is effective
+            to forget a client’s data. In experiments conducted on the MNIST, CIFAR10, and
+            CIFAR100 datasets, ConDa proves to be the fastest federated unlearning method,
+            outperforming the nearest state-of-the-art approach by at least 100X. Our emphasis
+            is on the non-IID Federated Learning setting, which presents the greatest challenge
+            for unlearning. Additionally, we validate ConDa’s robustness through backdoor
+            and membership inference attacks. We envision this work as a crucial component
+            for FL in adhering to legal and ethical requirements.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End paper abstract -->
+
+
+<!-- Image carousel -->
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container" >
+      <div style="display:flex; justify-content: center;">
+        <h2 class="title is-3">Results</h2>
+      </div>
+      <div id="results-carousel" class="carousel results-carousel">
+       <div class="item">
+        <!-- Your image here -->
+         <div class="image">
+          <img src="static/images/Runtime_comparision.png" alt="Runtime Comparision among baselines"  style="height:60vh; width:90vh;"/>
+         </div>
+        
+        <h2 class="subtitle has-text-centered" style="padding-left: 10vh; padding-top: 5vh; color:#000000;">
+          The runtime comparison
+          of the proposed ConDa and with the retrained model, negative gradient, PGA, and
+          FedEraser on ResNet18+CIFAR-10. The Y-axis is on log scale and time is reported in
+          seconds.
+
+        </h2>
+      </div>
+      <div class="item">
+        <!-- Your image here -->
+        <div class="image">
+        <img src="static/images/Table1.png" alt="MY ALT TEXT" style="padding-top: 10vh; " />
+        </div>
+        <h2 class="subtitle has-text-centered" style="padding-top:5vh; color:#000000;">
+          Unlearning results in a federated learning setting. We use 10 client for CIFAR-10+ResNet18,
+          MNIST+AllCNN and CIFAR-100+ResNet18. We forget Client 0 in this experiment. The cutoff
+          ratio in ConDa is set to 0.3 for CIFAR10 and 0.4 for MNIST and CIFAR-100 dataset. accuracy &
+          backdoor attack: value closer to retrained model is better, membership inference attack (MIA): value
+          close to 50% or close to retrained model is better.
+
+        </h2>
+      </div>
+      <!-- <div class="item">
+        <img src="static/images/carousel3.jpg" alt="MY ALT TEXT"/>
+        <h2 class="subtitle has-text-centered">
+         Third image description.
+       </h2>
+     </div>
+     <div class="item">
+      <img src="static/images/carousel4.jpg" alt="MY ALT TEXT"/>
+      <h2 class="subtitle has-text-centered">
+        Fourth image description.
+      </h2>
+    </div> -->
+  </div>
+</div>
+</div>
+</section>
+<!-- End image carousel -->
+
+<section class="hero is-small" style="background-color: #f1FFFF;">
+  <div class="hero-body">
+    <div class="container"  >
+      <div style="display:flex; justify-content: center;">
+        <h2 class="title is-3">Ablation Analysis</h2>
+      </div>
+      <div id="results-carousel" class="carousel results-carousel">
+        <div class="item">
+          <!-- Your image here -->
+          <div class="image">
+          <img src="static/images/Results_graph1.png" alt="MY ALT TEXT" style="padding-top: 20vh; " />
+          </div>
+          <h2 class="subtitle has-text-centered" style="padding-top:5vh; color:#000000;">
+            The results of ConDa on several Unlearning metrics: Accuracy (R-Set), Accuracy
+            (U-Set), Backdoor Attack, and MI attack at different cut-off ratio α. We visualize the unlearning
+            plateau where R-Set accuracy, U-Set accuracy, Backdoor attack and MIA are near ideal values.
+            Setting the α above or below the plateau leads to drop in desired unlearning performance. Results are
+            shown in the order, CIFAR-10, MNIST, CIFAR-100 (left-to-right).
+            
+  
+          </h2>
+        </div>
+       <div class="item">
+        <!-- Your image here -->
+         <div class="image">
+          <img src="static/images/Result_graph2.png" alt="Runtime Comparision among baselines" />
+         </div>
+        
+        <h2 class="subtitle has-text-centered" style="padding-left: 10vh; padding-top: 5vh; color:#000000;">
+          The results of ConDa for unlearning various clients (client 1 - client 9 in
+          CIFAR-10) from the global model. These results are compared with the retrained model, which
+          serves as the ground truth for unlearning. The performance of ConDa at different cut-off ratios α is
+          displayed, with the optimal trade-off highlighted in the graph.
+        </h2>
+      </div>
+      <div class="item">
+        <!-- Your image here -->
+        <div class="image">
+        <img src="static/images/Result_graph3_methods_comparision_part1.png" alt="MY ALT TEXT" style="height:60%;" />
+        </div>
+        <h2 class="subtitle has-text-centered" style="padding-top:5vh; color:#000000;">
+          The comparision of unlearning results of ConDa for various clients (client 0 - client 9 in
+          CIFAR-10) and comparision with the existing state-of-the-art methods. In most cases, ConDa closely
+          follows the Retrained model in both U-Set and R-Set accuracy and performs much better than existing
+          methods.
+          
+        </h2>
+      </div>
+      <div class="item">
+        <!-- Your image here -->
+        <div class="image">
+        <img src="static/images/Result_graph3_methods_comparision_part2.png" alt="MY ALT TEXT" style="padding-top: 10vh; " />
+        </div>
+        <h2 class="subtitle has-text-centered" style="padding-top:5vh; color:#000000;">
+          The comparision of unlearning results of ConDa for various clients (client 0 - client 9 in
+          CIFAR-10) and comparision with the existing state-of-the-art methods. In most cases, ConDa closely
+          follows the Retrained model in both U-Set and R-Set accuracy and performs much better than existing
+          methods.
+        </h2>
+      </div>
+      <div class="item">
+        <!-- Your image here -->
+        <div class="image">
+        <img src="static/images/Result_graph4_multiple_clients.png" alt="MY ALT TEXT"  />
+        </div>
+        <h2 class="subtitle has-text-centered" style="padding-top:5vh; color:#000000;">
+          The results of multiple clients unlearning in ConDa and comparision with the existing
+          state-of-the-art methods. In most cases, ConDa closely follows the Retrained model in both U-Set
+          and R-Set accuracy and performs much better than existing methods.
+        </h2>
+      </div>
+  </div>
+</div>
+</div>
+</section>
+
+
+
+
+<!-- Paper poster -->
+<section class="hero is-small is-light">
+  <div class="hero-body">
+    <div style="display:flex; justify-content: center; color:#000000;">
+      <h2 class="title is-3">Algorithm</h2>
+    </div>
+    <div class="algorithm">
+      \[
+      \begin{array}{l}
+      \textbf{ConDa Federated Unlearning} \\
+
+      \hline
+      1: \theta: \text{global model parameters} \\ 
+      2: \nabla\theta_n: \text{average gradient updates for each client} \\
+      3: C: \text{set of clients} \\
+      4: C_f: \text{set of forget clients} \\
+      5: \lambda: \text{dampening constant} \\
+      6: \alpha: \text{cut-off for dampening} \\
+      7: U: \text{dampening upper bound} \\
+      8: \Phi_C = \frac{1}{|C|} \sum_{n \in C} \nabla\theta_n \quad \text{(average for all clients)} \\
+      9: \Phi_{C_f} = \frac{1}{|C_f|} \sum_{n \in C_f} \nabla\theta_n \quad \text{(average for forget clients)} \\
+      10: \textbf{Compute } \text{ratio} = \frac{\Phi_C}{\Phi_{C_f}} \\
+      11: \textbf{Compute } \zeta = \lambda \cdot \text{ratio} \\
+      12: \textbf{Set } \beta = \min(\zeta, U) \\
+      13: \textbf{For each } i \in |\theta| \textbf{ do:} \\
+      14: \quad \textbf{If } \beta_i < (\alpha \cdot \text{ratio}_i) \textbf{ then:} \\
+      15: \quad\quad \theta'_i = \beta_i \cdot \theta_i \\
+      16: \quad \textbf{End if} \\
+      17: \textbf{End for} \\
+      18: \textbf{Return } \theta' \\
+      \hline
+      \end{array}
+      \]
+  </div>
+    </div>
+  </section>
+<!--End paper poster -->
+
+
+<!--BibTex citation -->
+  <section class="section" id="BibTeX" >
+    <div class="container is-max-desktop content">
+      <h2 class="title">BibTeX</h2>
+      <pre><code>@misc{chundawat2024condafastfederatedunlearning,
+        title={ConDa: Fast Federated Unlearning with Contribution Dampening}, 
+        author={Vikram S Chundawat and Pushkar Niroula and Prasanna Dhungana and Stefan Schoepf and Murari Mandal and Alexandra Brintrup},
+        year={2024},
+        eprint={2410.04144},
+        archivePrefix={arXiv},
+        primaryClass={cs.LG},
+        url={https://arxiv.org/abs/2410.04144}, 
+  }</code></pre>
+    </div>
+</section>
+<!--End BibTex citation -->
+
+
+  <footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+
+          <p>
+            This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a> which was adopted from the <a href="https://nerfies.github.io" target="_blank">Nerfies</a> project page.
+            You are free to borrow the source code of this website, we just ask that you link back to this page in the footer. <br> This website is licensed under a <a rel="license"  href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+  $(document).ready(function() {
+      $.ajax({
+          url: "data.json",
+          type: "GET",
+          success: function(data) {
+              $(".latex-content").html(data.latex_equation);
+          },
+          error: function(xhr, status, error) {
+              console.error("Error:", error);
+          }
+      });
+  });
+</script>
+<!-- Statcounter tracking code -->
+  
+<!-- You can add a tracker to track page visits by creating an account at statcounter.com -->
+
+    <!-- End of Statcounter Code -->
+
+  </body>
+  </html>
