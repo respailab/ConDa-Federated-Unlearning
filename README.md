@@ -12,7 +12,7 @@
 
 
 ## Overview
-![Teaser](https://github.com/respailab/ConDa-Federated-Unlearning/raw/main/assets/teaser.png)
+![Teaser](https://github.com/respailab/ConDa-Federated-Unlearning/blob/main/Assets/Teaser.png)
 
 Federated Learning (FL) enables collaborative model training across decentralized data sources or clients. While adding new participants to a shared model is straightforward, removing a participant and their related information from the shared model remains challenging. To address this, we introduce Contribution Dampening (ConDa), a framework that performs efficient unlearning by tracking the parameters affected by each client and applying synaptic dampening to those influenced by the forgetting client. Our technique does not require clients' data or any retraining and imposes no computational overhead on either the client or server side.
 
