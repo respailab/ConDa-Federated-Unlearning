@@ -8,7 +8,7 @@
 
 ## Authors
 
-[Vikram S. Chundawat](https://github.com/vikram2000b), [Pushkar Niroula](https://www.linkedin.com/in/pushkar-niroula/), [Prasanna Dhungana](https://www.linkedin.com/in/prasanna-dhungana/), [Stefan Schoepf](https://github.com/if-loops), [Murari Mandal](https://murarimandal.github.io/), [Alexandra Brintrup](blank)
+[Vikram S. Chundawat](https://github.com/vikram2000b), [Pushkar Niroula](https://www.linkedin.com/in/pushkar-niroula/), [Prasanna Dhungana](https://www.linkedin.com/in/prasanna-dhungana/), [Stefan Schoepf](https://github.com/if-loops), [Alexandra Brintrup](blank), [Murari Mandal](https://murarimandal.github.io/)
 
 
 ## Overview
